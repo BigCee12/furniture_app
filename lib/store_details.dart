@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:furniture_app/home_screen.dart';
 import 'package:furniture_app/models/store_item_model.dart';
 import 'package:furniture_app/utilities/app_textstyle.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class StoreDetails extends HookWidget {
+class StoreDetails extends HookConsumerWidget {
   final StoreItemModel storeItem;
-  StoreDetails(this.storeItem, {super.key});
+  final int index;
+  StoreDetails(this.storeItem, this.index, {super.key});
 
   final List<Color> colors = [
     Colors.pink[50]!,
@@ -17,9 +20,9 @@ class StoreDetails extends HookWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final selectedColorIndex = useState(0);
-    final isFavorite = useState(false);
+    final isFavorite = ref.watch(isFavoriteNotifierProvider)[index] ?? false;
     final animationController = useAnimationController(
       duration: const Duration(seconds: 1),
     );
@@ -287,7 +290,9 @@ class StoreDetails extends HookWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        isFavorite.value = !isFavorite.value;
+                        ref
+                            .read(isFavoriteNotifierProvider.notifier)
+                            .toggleFavorite(index);
                       },
                       child: SlideTransition(
                         position: slideAnimation,
@@ -298,7 +303,7 @@ class StoreDetails extends HookWidget {
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: isFavorite.value
+                          child: isFavorite
                               ? Icon(Icons.favorite,
                                   color: Colors.black.withOpacity(0.7))
                               : const Icon(Icons.favorite_border),

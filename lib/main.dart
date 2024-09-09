@@ -1,13 +1,14 @@
 // import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:furniture_app/home_screen.dart';
 // import 'package:furniture_app/store_details.dart';
 // import 'package:furniture_app/models/store_item_model.dart';
 import 'package:furniture_app/utilities/app_textstyle.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

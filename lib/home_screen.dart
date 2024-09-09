@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:furniture_app/models/store_item_model.dart';
 import 'package:furniture_app/store_details.dart';
 import 'package:furniture_app/utilities/app_textstyle.dart';
@@ -20,23 +21,44 @@ class HomeScreen extends HookWidget {
       ),
       itemBuilder: (context, index) {
         final storeItem = itemsList[index];
-        return StoreItemCard(storeItem: storeItem);
+        return StoreItemCard(
+          index,
+          storeItem: storeItem,
+        );
       },
     );
   }
 }
 
-class StoreItemCard extends HookWidget {
-  final StoreItemModel storeItem;
+final isFavoriteNotifierProvider =
+    StateNotifierProvider<IsFavoriteNotifier, Map<int, bool>>((ref) {
+  return IsFavoriteNotifier();
+});
 
-  const StoreItemCard({super.key, required this.storeItem});
+class IsFavoriteNotifier extends StateNotifier<Map<int, bool>> {
+  IsFavoriteNotifier() : super({});
+
+  void toggleFavorite(int itemId) {
+    state = {
+      ...state,
+      itemId: !(state[itemId] ?? false), // Toggle the favorite status
+    };
+  }
+}
+
+class StoreItemCard extends ConsumerWidget {
+  final StoreItemModel storeItem;
+  final int index;
+
+  const StoreItemCard(this.index, {super.key, required this.storeItem});
 
   @override
-  Widget build(BuildContext context) {
-    final isFavorite = useState(false);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isFavorite = ref.watch(isFavoriteNotifierProvider)[index] ?? false;
+
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(_createImageRoute(storeItem));
+        Navigator.of(context).push(_createImageRoute(index, storeItem));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -63,9 +85,11 @@ class StoreItemCard extends HookWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    isFavorite.value = !isFavorite.value;
+                    ref
+                        .read(isFavoriteNotifierProvider.notifier)
+                        .toggleFavorite(index);
                   },
-                  child: isFavorite.value
+                  child: isFavorite
                       ? Icon(Icons.favorite,
                           color: Colors.grey.withOpacity(0.9))
                       : const Icon(Icons.favorite_border),
@@ -132,11 +156,13 @@ class StoreItemCard extends HookWidget {
 }
 
 // Create a custom route for the page transition
-Route _createImageRoute(StoreItemModel storeItem) {
+Route _createImageRoute(int index, StoreItemModel storeItem) {
   return PageRouteBuilder(
     transitionDuration: const Duration(seconds: 1), // Slow down the transition
-    pageBuilder: (context, animation, secondaryAnimation) =>
-        StoreDetails(storeItem),
+    pageBuilder: (context, animation, secondaryAnimation) => StoreDetails(
+      storeItem,
+      index,
+    ),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       // Define the animation curve for rotation and slowing down
       // const begin = 0.0;

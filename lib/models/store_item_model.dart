@@ -1,4 +1,5 @@
 class StoreItemModel {
+  int id;
   String name;
   double price;
   String starRating;
@@ -6,6 +7,7 @@ class StoreItemModel {
   String imagePath;
   String? description;
   StoreItemModel({
+    required this.id,
     required this.name,
     required this.price,
     required this.starRating,
@@ -17,6 +19,7 @@ class StoreItemModel {
 
 final List<StoreItemModel> itemsList = [
   StoreItemModel(
+    id: 1,
     imagePath: 'assets/store_items/chair1-removebg-preview.png',
     name: "Classic Chair",
     price: 10.4,
@@ -26,6 +29,7 @@ final List<StoreItemModel> itemsList = [
         "This is a classic chair that is perfect for your living room. It is made of high-quality materials and is very comfortable to sit on. The chair is available in different colors and is very easy to clean.",
   ),
   StoreItemModel(
+    id: 2,
     imagePath: 'assets/store_items/chair6-removebg-preview.png',
     name: "Comfert Chair",
     price: 30.4,
@@ -35,6 +39,7 @@ final List<StoreItemModel> itemsList = [
         "This is a classic chair that is perfect for your living room. It is made of high-quality materials and is very comfortable to sit on. The chair is available in different colors and is very easy to clean.",
   ),
   StoreItemModel(
+    id: 3,
     imagePath: 'assets/store_items/chair4-removebg-preview.png',
     name: "High Chair",
     price: 20.2,
@@ -44,6 +49,7 @@ final List<StoreItemModel> itemsList = [
         "This is a classic chair that is perfect for your living room. It is made of high-quality materials and is very comfortable to sit on. The chair is available in different colors and is very easy to clean.",
   ),
   StoreItemModel(
+    id: 4,
     imagePath: 'assets/store_items/chair5-removebg-preview.png',
     name: "Elegant Chair",
     price: 50.4,
@@ -53,6 +59,7 @@ final List<StoreItemModel> itemsList = [
         "This is a classic chair that is perfect for your living room. It is made of high-quality materials and is very comfortable to sit on. The chair is available in different colors and is very easy to clean.",
   ),
   StoreItemModel(
+    id: 5,
     imagePath: 'assets/store_items/chair2-removebg-preview.png',
     name: "Comfortable Chair",
     price: 40.4,
@@ -62,6 +69,7 @@ final List<StoreItemModel> itemsList = [
         "This is a classic chair that is perfect for your living room. It is made of high-quality materials and is very comfortable to sit on. The chair is available in different colors and is very easy to clean.",
   ),
   StoreItemModel(
+    id: 6,
     imagePath: 'assets/store_items/chair4-removebg-preview.png',
     name: "Dinning Chair",
     price: 30.4,
